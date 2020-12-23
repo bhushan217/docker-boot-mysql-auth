@@ -1,0 +1,85 @@
+version: '3'
+services:
+  b2k-mysql-db:
+    container_name: b2k-mysql-db
+    env_file:
+      - .env
+    image: "mysql/mysql-server:5.7" 
+    ports:
+      - 3308:3306
+    networks:
+      b2k-network:
+    environment:
+      - MYSQL_ONETIME_PASSWORD=true
+      - MYSQL_DATABASE= ${MYSQL_DB}
+      - MYSQL_USER= ${MYSQL_USER}
+      - MYSQL_PASSWORD= ${MYSQL_PASSWORD}
+      - MYSQL_ROOT_PASSWORD= ${MYSQL_ROOT_PASSWORD}
+    volumes:
+        - ./mysql-data:/var/lib/mysql57:rw
+        - ./mysql-init:/docker-entrypoint-initdb.d/:ro
+
+  #activemq-artemis      vromero/activemq-artemis
+  b2k-activemq-artemis:
+    env_file:
+      - .env
+    image: "vromero/activemq-artemis"
+    environment:
+      - BASE_IMAGE=vromero/activemq-artemis
+      - ACTIVEMQ_ARTEMIS_VERSION=${ACTIVEMQ_ARTEMIS_VERSION}
+      - ARTEMIS_USERNAME=${ARTEMIS_USERNAME}
+      - ARTEMIS_PASSWORD=${ARTEMIS_PASSWORD}
+      - ENABLE_JMX_EXPORTER=true
+      - JMX_EXPORTER_VERSION=0.13.0
+      - DISABLE_SECURITY=true
+      #- JOLOKIA_ALLOW_ORIGIN=0.0.0.0
+    ports:
+      - 61616:61616
+      - 5672:5672
+      - 9404:9404
+      - 8161:8161
+    networks:
+      b2k-network:
+    volumes:
+      - ./artemis-data:/var/lib/mysql57:rw
+      #- ./artemis-init:/docker-entrypoint-initdb.d/:ro
+
+  springboot-mysql-app:
+    container_name: springboot-mysql-app
+    image: springboot-mysql-app:latest
+    env_file:
+      - .env
+    build:
+      context: ./
+      #dockerfile: Dockerfile
+    working_dir: /usr/src/app
+    restart: on-failure
+    volumes:
+      #- ${APPLICATION_ROOT_FOLDER}:/usr/src/app:rw
+      - ${M2_REPO}:/root/.m2
+    ports:
+      - 8082:8080
+      - 5005:5005
+    mem_limit: 300m
+    mem_reservation: 100m
+    depends_on:
+      - b2k-mysql-db
+      - b2k-activemq-artemis
+    networks: 
+      b2k-network: 
+    environment:
+      LOG_DIR: ${LOG_DIR}
+      JDBC_DRIVER: ${JDBC_DRIVER}
+      SPRING_DATASOURCE_USERNAME: ${MYSQL_USER}
+      SPRING_DATASOURCE_PASSWORD: ${MYSQL_PASSWORD}    
+      SPRING_DATASOURCE_URL: jdbc:mysql://b2k-mysql-db/${MYSQL_DB}?useSSL=false&allowPublicKeyRetrieval=true
+      SPRING_ARTEMIS_MODE: native
+      SPRING_ARTEMIS_USER: ${ARTEMIS_USERNAME}
+      SPRING_ARTEMIS_PASSWORD: ${ARTEMIS_PASSWORD}
+      SPRING_ARTEMIS_HOST: b2k-activemq-artemis
+      SPRING_ARTEMIS_PORT: 61616
+      #SPRING_ARTEMIS_broker-url=tcp://localhost:61616?jms.redeliveryPolicy.maximumRedeliveries=1
+    command: mvn spring-boot:run #mvn clean package #
+    
+networks:
+    b2k-network:

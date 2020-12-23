@@ -1,0 +1,8 @@
+{
+  "properties": [
+    {
+      "name": "jms.queue.destination.reg_employee",
+      "type": "java.lang.String",
+      "description": "Description for jms.queue.destination.reg_employee."
+  }
+] }
