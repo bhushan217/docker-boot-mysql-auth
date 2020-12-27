@@ -6,6 +6,7 @@ import in.b2k.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
 import lombok.experimental.FieldDefaults;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.authentication.dao.AbstractUserDetailsAuthenticationProvider;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -20,17 +21,20 @@ import static lombok.AccessLevel.PRIVATE;
 @Component
 @AllArgsConstructor(access = PACKAGE)
 @FieldDefaults(level = PRIVATE, makeFinal = true)
+@Slf4j
 public final class TokenAuthenticationProvider extends AbstractUserDetailsAuthenticationProvider {
     @NonNull
     UserRepository auth;
 
     @Override
     protected void additionalAuthenticationChecks(final UserDetails d, final UsernamePasswordAuthenticationToken auth) {
+        log.debug("additionalAuthenticationChecks {} for token {}", d, auth);
         // Nothing to do
     }
 
     @Override
     protected UserDetails retrieveUser(final String username, final UsernamePasswordAuthenticationToken authentication) {
+        log.debug("retrieveUser {} for token {}", username, authentication);
         final Object token = authentication.getCredentials();
         User user = Optional.ofNullable(token)
                 .map(String::valueOf)

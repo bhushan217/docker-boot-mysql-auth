@@ -5,9 +5,7 @@ import in.b2k.repository.UserRepository;
 import org.exparity.hamcrest.date.ZonedDateTimeMatchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.test.context.support.WithMockUser;
 
 import java.time.ZonedDateTime;
@@ -21,8 +19,11 @@ import static org.jgroups.util.Util.assertNotNull;
 @SpringBootTest
 public class SpringDataAuditApplicationTests {
 
-    @Autowired
     private UserRepository userRepository;
+
+    public SpringDataAuditApplicationTests(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     private User user;
     private String USERNAME;

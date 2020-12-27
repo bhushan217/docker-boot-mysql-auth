@@ -51,12 +51,11 @@ services:
       - .env
     build:
       context: ./
-      dockerfile: Dockerfile
+      #dockerfile: Dockerfile
     working_dir: /usr/src/app
     restart: on-failure
     volumes:
       #- ${APPLICATION_ROOT_FOLDER}:/usr/src/app:rw
-      #- ./:/usr/src/app:rw
       - ${M2_REPO}:/root/.m2
     ports:
       - 8082:8080
@@ -70,7 +69,6 @@ services:
     networks: 
       b2k-network: 
     environment:
-      #JAVA_TOOL_OPTIONS: "agentlib:jdwp=transport=dt_socket,address=5005,server=y,suspend=n"
       LOG_DIR: ${LOG_DIR}
       JDBC_DRIVER: ${JDBC_DRIVER}
       SPRING_DATASOURCE_USERNAME: ${MYSQL_USER}
@@ -82,7 +80,7 @@ services:
       SPRING_ARTEMIS_HOST: b2k-activemq-artemis
       SPRING_ARTEMIS_PORT: 61616
       #SPRING_ARTEMIS_broker-url=tcp://localhost:61616?jms.redeliveryPolicy.maximumRedeliveries=1
-    command: ls # mvn clean package
+    command: mvn spring-boot:run #mvn clean package #
     
 networks:
     b2k-network:

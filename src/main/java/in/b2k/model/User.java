@@ -46,7 +46,7 @@ public class User extends BaseEntity{
     @Column(name = "LAST_LOGIN")
     private LocalDateTime lastLogin;
 
-    @Column(name = "TOKEN", length = 60)
+    @Column(name = "TOKEN", length = 100)
     private String token;
 
 }

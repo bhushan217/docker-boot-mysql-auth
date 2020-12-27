@@ -25,5 +25,9 @@ public interface UserRepository extends JpaRepository<User, UUID> {
 
     @Modifying
     @Query("update User u set u.token = :token, u.enabled = :enabled where u.id = :id")
-    void updateTokenById(@Param("token") String token, @Param("enabled") Boolean enabled, @Param("id") UUID id);
+    int updateTokenById(@Param("token") String token, @Param("enabled") Boolean enabled, @Param("id") UUID id);
+
+    @Modifying
+    @Query("update User u set u.token = null, u.lastLogin = CURRENT_TIMESTAMP where u.username = :username")
+    int logout(@Param("username") String username);
 }

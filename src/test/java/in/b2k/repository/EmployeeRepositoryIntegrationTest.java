@@ -4,7 +4,6 @@ import in.b2k.model.Employee;
 import in.b2k.model.enums.Rating;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -17,12 +16,14 @@ import static org.junit.Assert.assertThat;
 @DataJpaTest
 public class EmployeeRepositoryIntegrationTest {
 
-    @Autowired
     private TestEntityManager entityManager;
 
-    @Autowired
     private EmployeeRepository employeeRepository;
 
+    public EmployeeRepositoryIntegrationTest(TestEntityManager entityManager, EmployeeRepository employeeRepository) {
+        this.entityManager = entityManager;
+        this.employeeRepository = employeeRepository;
+    }
 
     @Test
     @WithMockUser(username = "admin", authorities = { "ADMIN", "USER" })

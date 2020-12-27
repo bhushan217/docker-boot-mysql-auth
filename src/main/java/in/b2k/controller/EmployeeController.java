@@ -3,9 +3,12 @@ package in.b2k.controller;
 import in.b2k.exception.ResourceNotFoundException;
 import in.b2k.model.Employee;
 import in.b2k.repository.EmployeeRepository;
+import in.b2k.request.vo.EmployeeVO;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.jms.core.JmsTemplate;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -15,7 +18,9 @@ import java.util.Map;
 import java.util.UUID;
 
 @RestController
+//@PreAuthorize(value = "hasAuthority('USER','ADMIN')")
 @RequestMapping("/api")
+@Slf4j
 public class EmployeeController {
 
 	private EmployeeRepository employeeRepository;
@@ -34,24 +39,22 @@ public class EmployeeController {
 		return employeeRepository.findAll();
 	}
 
-	@GetMapping("/employees/{id}")
-	public ResponseEntity<Employee> getEmployeeById(@PathVariable(value = "id") UUID employeeId)
+	@GetMapping("/employee")
+	public ResponseEntity<Employee> getEmployeeById(@RequestBody EmployeeVO employeeVO)
 			throws ResourceNotFoundException {
-		Employee employee = employeeRepository.findById(employeeId)
+		UUID employeeId = employeeVO.getId();
+		log.debug("getEmployeeById {}",employeeVO.getId());
+		Employee employee = employeeRepository.findById(employeeVO.getId())
 				.orElseThrow(() -> new ResourceNotFoundException("Employee not found for this id :: " + employeeId));
 		return ResponseEntity.ok().body(employee);
 	}
 
 	@PostMapping("/employees")
 	public ResponseEntity<Employee> createEmployee(@Valid @RequestBody Employee employee) {
-		System.out.println("Creating Employee: " + employee);
+		log.debug("Creating Employee: {}", employee);
 		employeeJmsTemplate.convertAndSend(destQueueRegEmployee, employee);
 		return ResponseEntity.ok().body(employee);
 	}
-
-/*	private String toJSON(Employee employee) {
-		return new ObjectMapper().writeValueAsString(employee);
-	}*/
 
 	@PutMapping("/employees/{id}")
 	public ResponseEntity<Employee> updateEmployee(@PathVariable(value = "id") UUID employeeId,
