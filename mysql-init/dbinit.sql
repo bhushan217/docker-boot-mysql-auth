@@ -2,7 +2,20 @@ DROP DATABASE IF EXISTS dockerdemo;
 CREATE DATABASE dockerdemo;
 GRANT ALL PRIVILEGES ON dockerdemo.* TO 'demo'@'%' IDENTIFIED BY 'demo';
 GRANT ALL PRIVILEGES ON dockerdemo.* TO 'demo'@'localhost' IDENTIFIED BY 'demo';
+GRANT ALL PRIVILEGES ON dockerdemo.* TO 'demo'@'b2k-mysql-db' IDENTIFIED BY 'demo';
+GRANT ALL PRIVILEGES ON dockerdemo.* TO 'demo'@'springboot-mysql-app' IDENTIFIED BY 'demo';
 USE dockerdemo;
+CREATE TABLE `b2k_department` (
+    `id` binary(16) NOT NULL,
+    `created_at` datetime NOT NULL,
+    `created_by` varchar(31) NOT NULL,
+    `updated_at` datetime NOT NULL,
+    `updated_by` varchar(31) NOT NULL,
+    `version` int(11) DEFAULT NULL,
+    `name` varchar(31) NOT NULL,
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1
+;
 CREATE TABLE `b2k_employee` (
     `id` binary(16) NOT NULL,
     `created_at` datetime NOT NULL,
@@ -14,7 +27,10 @@ CREATE TABLE `b2k_employee` (
     `first_name` varchar(63) NOT NULL,
     `last_name` varchar(63) NOT NULL,
     `rating` varchar(255) DEFAULT NULL,
-    PRIMARY KEY (`id`)
+    `dept_id` binary(16) DEFAULT NULL,
+    PRIMARY KEY (`id`),
+    KEY `FK_B2K_DEPT_EMP` (`dept_id`),
+    CONSTRAINT `FK_B2K_DEPT_EMP` FOREIGN KEY (`dept_id`) REFERENCES `b2k_department` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1
 ;
 CREATE TABLE `b2k_user` (
@@ -33,6 +49,10 @@ CREATE TABLE `b2k_user` (
     `username` varchar(31) NOT NULL,
     PRIMARY KEY (`id`),
     UNIQUE KEY `UK_B2K_USERNAME` (`username`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
+) ENGINE=InnoDB DEFAULT CHARSET=latin1
+;
 INSERT INTO `b2k_user` values ( unhex(replace(UUID(), '-', '')), current_timestamp , 'SYSTEM', current_timestamp , 'SYSTEM', 1, 1,null, 'admin', 'admin7', 'ADMIN', null, 'admin' );
+INSERT INTO `b2k_department` values ( unhex(replace(UUID(), '-', '')), current_timestamp , 'SYSTEM', current_timestamp , 'SYSTEM', 1, 'ADMIN');
+INSERT INTO `b2k_department` values ( unhex(replace(UUID(), '-', '')), current_timestamp , 'SYSTEM', current_timestamp , 'SYSTEM', 1, 'IT');
+
+

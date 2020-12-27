@@ -4,11 +4,8 @@ package in.b2k.model;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import in.b2k.model.enums.Role;
 import lombok.*;
-import org.hibernate.annotations.ColumnDefault;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
-import javax.validation.Constraint;
 import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
 
@@ -16,11 +13,11 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(callSuper=false)
+@EqualsAndHashCode(callSuper = false)
 @Entity
 @ToString
 @Table(name = "B2K_USER", uniqueConstraints = @UniqueConstraint(name = "UK_B2K_USERNAME", columnNames = "USERNAME"))
-public class User extends BaseEntity{
+public class User extends Auditable {
 
     @Column(name = "USERNAME", unique = true, length = 31, updatable = false, nullable = false)
     @NotBlank(message = "username is required")
@@ -33,7 +30,7 @@ public class User extends BaseEntity{
     //@ColumnDefault(value="USER")
     @Column(name = "ROLE", nullable = false)
     @Enumerated(EnumType.STRING)
-    protected Role role ;
+    protected Role role;
 
     @Column(name = "PASSWORD")
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
@@ -41,7 +38,7 @@ public class User extends BaseEntity{
 
     //@ColumnDefault(value="false")
     @Column(name = "IS_ACTIVE", nullable = false)
-    private Boolean enabled ;
+    private Boolean enabled;
 
     @Column(name = "LAST_LOGIN")
     private LocalDateTime lastLogin;

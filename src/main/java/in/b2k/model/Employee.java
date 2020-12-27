@@ -9,22 +9,26 @@ import javax.persistence.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(callSuper=false)
+@EqualsAndHashCode(callSuper = false)
 @Entity
 @Table(name = "B2K_EMPLOYEE")
-public class Employee extends BaseEntity{
+public class Employee extends Auditable {
 
-	@Column(name = "FIRST_NAME", length = 63, nullable = false)
-	private String firstName;
+    @Column(name = "FIRST_NAME", length = 63, nullable = false)
+    private String firstName;
 
-	@Column(name = "LAST_NAME", length = 63, nullable = false)
-	private String lastName;
+    @Column(name = "LAST_NAME", length = 63, nullable = false)
+    private String lastName;
 
-	@Column(name = "EMAIL_ID", length = 63, nullable = false)
-	private String emailId;
+    @Column(name = "EMAIL_ID", length = 63, nullable = false)
+    private String emailId;
 
-	@Enumerated(EnumType.STRING)
-	private Rating rating;
+    @Enumerated(EnumType.STRING)
+    private Rating rating;
 
-	
+    @ManyToOne
+    @JoinColumn(name = "DEPT_ID")
+    private Department department;
+
+
 }

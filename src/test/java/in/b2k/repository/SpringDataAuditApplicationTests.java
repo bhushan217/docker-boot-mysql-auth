@@ -1,32 +1,39 @@
-package in.b2k.configuration;
+package in.b2k.repository;
 
+import in.b2k.configuration.TestAuditingConfigurationB2k;
 import in.b2k.model.User;
 import in.b2k.repository.UserRepository;
 import org.exparity.hamcrest.date.ZonedDateTimeMatchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
 
+import static in.b2k.utils.B2kConstatnt.TEST_AUDITOR;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.jgroups.util.Util.assertNotNull;
 
-@SpringBootTest
+@DataJpaTest()
+@ActiveProfiles("test")
+@Import({TestAuditingConfigurationB2k.class})
 public class SpringDataAuditApplicationTests {
 
+    @Autowired
     private UserRepository userRepository;
-
-    public SpringDataAuditApplicationTests(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
 
     private User user;
     private String USERNAME;
+
 
     @BeforeEach
     public void create() {
@@ -37,7 +44,7 @@ public class SpringDataAuditApplicationTests {
 
         assertNotNull(user.getUpdatedAt());
 
-        String auditor = "Mr. Auditor";
+        String auditor = TEST_AUDITOR;
         assertThat(user.getCreatedBy(),is(equalTo(auditor)));
 
         assertThat(user.getUpdatedBy(),is(equalTo(auditor)));

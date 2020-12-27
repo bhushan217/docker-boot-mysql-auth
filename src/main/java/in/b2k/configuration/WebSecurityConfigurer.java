@@ -18,7 +18,6 @@ import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.authentication.AnonymousAuthenticationFilter;
 import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
-import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.security.web.util.matcher.NegatedRequestMatcher;
 import org.springframework.security.web.util.matcher.OrRequestMatcher;
@@ -32,7 +31,6 @@ import static org.springframework.security.config.http.SessionCreationPolicy.STA
 
 @Configuration
 @EnableWebSecurity
-//@WebSecurityConfiguration
 public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
 
     private static final RequestMatcher PUBLIC_URLS = new OrRequestMatcher(
@@ -65,18 +63,18 @@ public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
                 .sessionCreationPolicy(STATELESS)
                 .and()
                 .authorizeRequests()
-                    .requestMatchers(PUBLIC_URLS).permitAll()
+                .requestMatchers(PUBLIC_URLS).permitAll()
                 .and()
-                    .exceptionHandling()
-                    // this entry point handles when you request a protected page and you are not yet
-                    // authenticated
-                        .defaultAuthenticationEntryPointFor(forbiddenEntryPoint(), PROTECTED_URLS)
+                .exceptionHandling()
+                // this entry point handles when you request a protected page and you are not yet
+                // authenticated
+                .defaultAuthenticationEntryPointFor(forbiddenEntryPoint(), PROTECTED_URLS)
                 .and()
-                    .authenticationProvider(provider)
-                    .addFilterBefore(restAuthenticationFilter(), AnonymousAuthenticationFilter.class)//BasicAuthenticationFilter.class)//
-                    .authorizeRequests()
-                    .requestMatchers(PROTECTED_URLS)
-                    .authenticated()
+                .authenticationProvider(provider)
+                .addFilterBefore(restAuthenticationFilter(), AnonymousAuthenticationFilter.class)//BasicAuthenticationFilter.class)//
+                .authorizeRequests()
+                .requestMatchers(PROTECTED_URLS)
+                .authenticated()
                 .and()
                 .csrf().disable()
                 .formLogin().disable()

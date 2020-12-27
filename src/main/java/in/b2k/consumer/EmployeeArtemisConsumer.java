@@ -10,15 +10,15 @@ import org.springframework.stereotype.Component;
 @Slf4j
 public class EmployeeArtemisConsumer {
 
-    private EmployeeRepository employeeRepository;
+    private final EmployeeRepository employeeRepository;
 
-    EmployeeArtemisConsumer(EmployeeRepository employeeRepository){
+    EmployeeArtemisConsumer(EmployeeRepository employeeRepository) {
         this.employeeRepository = employeeRepository;
     }
 
     @JmsListener(destination = "${jms.queue.destination.reg_employee}")
     public void receive(Employee employee) {
-        log.debug("Received employee: {}" , employee);
+        log.debug("Received employee: {}", employee);
         employeeRepository.save(employee);
     }
 }
