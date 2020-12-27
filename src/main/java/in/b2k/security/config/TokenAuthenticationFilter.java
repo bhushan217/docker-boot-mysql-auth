@@ -21,7 +21,7 @@ import static lombok.AccessLevel.PRIVATE;
 @Slf4j
 public final class TokenAuthenticationFilter extends AbstractAuthenticationProcessingFilter {
     private static final String BEARER = "Bearer";
-    private static final String AUTHORIZATION="Authorization";
+    private static final String AUTHORIZATION = "Authorization";
 
     public TokenAuthenticationFilter(final RequestMatcher requiresAuth) {
         super(requiresAuth);
@@ -36,12 +36,12 @@ public final class TokenAuthenticationFilter extends AbstractAuthenticationProce
         log.debug("attemptAuthentication {}: {}", AUTHORIZATION, param);
 
         final String token = ofNullable(param)
-                .map(value -> (value.contains(BEARER))? value.substring(6):value)
+                .map(value -> (value.contains(BEARER)) ? value.substring(6) : value)
                 .map(String::trim)
                 .orElseThrow(() -> new BadCredentialsException("Missing Authentication Token"));
 
         final Authentication auth = new UsernamePasswordAuthenticationToken(token, token);
-        log.debug("attemptAuthentication auth {}: {}",auth,  token);
+        log.debug("attemptAuthentication auth {}: {}", auth, token);
         return getAuthenticationManager().authenticate(auth);
     }
 

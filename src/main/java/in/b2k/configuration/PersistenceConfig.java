@@ -14,11 +14,11 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableJpaAuditing(dateTimeProviderRef = "dateTimeProvider", auditorAwareRef = "auditorProvider")
 @EnableJpaRepositories(basePackages = {"in.b2k.repository"})
 @EnableTransactionManagement
-public class PersistenceContext {
+public class PersistenceConfig {
 
     final AuditingDateTimeProvider auditingDateTimeProvider;
 
-    public PersistenceContext(AuditingDateTimeProvider auditingDateTimeProvider) {
+    public PersistenceConfig(AuditingDateTimeProvider auditingDateTimeProvider) {
         this.auditingDateTimeProvider = auditingDateTimeProvider;
     }
 
@@ -26,6 +26,7 @@ public class PersistenceContext {
     AuditorAware<String> auditorProvider() {
         return new UsernameAuditorAware();
     }
+
     @Bean
     DateTimeProvider dateTimeProvider() {
         return auditingDateTimeProvider;

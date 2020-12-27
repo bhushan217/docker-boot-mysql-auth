@@ -10,10 +10,10 @@ import javax.persistence.Table;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(callSuper=false)
+@EqualsAndHashCode(callSuper = false)
 @Entity
 @Table(name = "B2K_DEPARTMENT")
-public class Department extends BaseEntity{
+public class Department extends Auditable {
 
     @Column(name = "NAME", length = 31, updatable = false, nullable = false)
     private String name;

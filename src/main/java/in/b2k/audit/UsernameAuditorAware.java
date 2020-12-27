@@ -5,11 +5,11 @@ import org.springframework.data.domain.AuditorAware;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
-@Component
+@Service
 @Slf4j
 public class UsernameAuditorAware implements AuditorAware<String> {
 
@@ -21,7 +21,7 @@ public class UsernameAuditorAware implements AuditorAware<String> {
         Authentication authentication = context.getAuthentication();
 
         if (authentication == null || !authentication.isAuthenticated()) {
-            log.info("authentication not found {}",authentication);
+            log.info("authentication not found {}", authentication);
             log.debug("Current user is anonymous. Returning null.");
             return Optional.of("ANONYMOUS");
         }

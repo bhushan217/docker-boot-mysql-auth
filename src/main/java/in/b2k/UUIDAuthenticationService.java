@@ -30,14 +30,14 @@ public class UUIDAuthenticationService implements UserAuthenticationService {
 
         final String uuid = UUID.randomUUID().toString();
         Optional<User> user = userRepository.findByUsernameAndPassword(username, password);
-        if(user.isPresent()){
+        if (user.isPresent()) {
             User userToUpdate = user.get();
             userToUpdate.setEnabled(true);
             userToUpdate.setToken(uuid);
             User updatedRecs = userRepository.save(userToUpdate);//updateTokenById(uuid, true, user.get().getId());
-            log.debug("updatedRecs {}" ,updatedRecs);
+            log.debug("updatedRecs {}", updatedRecs);
             return Optional.of(uuid);
-        }else{
+        } else {
             return Optional.of(null);
         }
     }
