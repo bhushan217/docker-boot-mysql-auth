@@ -3,11 +3,15 @@ package in.b2k.controller;
 import in.b2k.exception.ResourceNotFoundException;
 import in.b2k.model.Employee;
 import in.b2k.repository.EmployeeRepository;
+import in.b2k.request.mapper.EmployeeMapper;
 import in.b2k.request.vo.EmployeeVO;
 import lombok.extern.slf4j.Slf4j;
+import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.jms.core.JmsTemplate;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -39,17 +43,19 @@ public class EmployeeController {
     }
 
     @GetMapping("/employee")
-    public ResponseEntity<Employee> getEmployeeById(@RequestBody EmployeeVO employeeVO)
+    public ResponseEntity<EmployeeVO> getEmployeeById(@RequestBody EmployeeVO employeeVO)
             throws ResourceNotFoundException {
         UUID employeeId = employeeVO.getId();
         log.debug("getEmployeeById {}", employeeVO.getId());
         Employee employee = employeeRepository.findById(employeeVO.getId())
                 .orElseThrow(() -> new ResourceNotFoundException("Employee not found for this id :: " + employeeId));
-        return ResponseEntity.ok().body(employee);
+        return ResponseEntity.ok().body(EmployeeMapper.INSTANCE.toVO(employee));
     }
 
     @PostMapping("/employees")
-    public ResponseEntity<Employee> createEmployee(@Valid @RequestBody Employee employee) {
+    public ResponseEntity<Employee> createEmployee(@Valid @RequestBody EmployeeVO employeeVO, @AuthenticationPrincipal final UserDetails user) {
+        Employee employee = EmployeeMapper.INSTANCE.toEntity(employeeVO);
+        employee.setCreatedBy(user.getUsername());
         log.debug("Creating Employee: {}", employee);
         employeeJmsTemplate.convertAndSend(destQueueRegEmployee, employee);
         return ResponseEntity.ok().body(employee);

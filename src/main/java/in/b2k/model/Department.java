@@ -2,6 +2,7 @@ package in.b2k.model;
 
 import lombok.*;
 
+import javax.persistence.Cacheable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
@@ -11,6 +12,7 @@ import javax.persistence.Table;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
+@Cacheable
 @Entity
 @Table(name = "B2K_DEPARTMENT")
 public class Department extends Auditable {

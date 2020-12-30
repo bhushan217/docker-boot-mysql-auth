@@ -27,6 +27,7 @@ public class UsernameAuditorAware implements AuditorAware<String> {
         }
 
         AppUserPrincipal principal = (AppUserPrincipal) authentication.getPrincipal();
+        log.debug("Current user is {}.", principal.getUsername());
         return Optional.of(principal.getUsername());
     }
 

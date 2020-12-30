@@ -9,7 +9,8 @@ import javax.persistence.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(callSuper = false)
+@EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true)
 @Entity
 @Table(name = "B2K_EMPLOYEE")
 public class Employee extends Auditable {
@@ -26,7 +27,7 @@ public class Employee extends Auditable {
     @Enumerated(EnumType.STRING)
     private Rating rating;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(name = "DEPT_ID")
     private Department department;
 

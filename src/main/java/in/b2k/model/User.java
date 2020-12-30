@@ -14,8 +14,9 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-@Entity
 @ToString
+@Cacheable
+@Entity
 @Table(name = "B2K_USER", uniqueConstraints = @UniqueConstraint(name = "UK_B2K_USERNAME", columnNames = "USERNAME"))
 public class User extends Auditable {
 
