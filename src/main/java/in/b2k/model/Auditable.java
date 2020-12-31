@@ -1,6 +1,9 @@
 package in.b2k.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.GenericGenerator;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
@@ -13,9 +16,12 @@ import java.io.Serializable;
 import java.time.ZonedDateTime;
 import java.util.UUID;
 
+@Data
+@SuperBuilder
+@NoArgsConstructor
+@AllArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
 @MappedSuperclass
-@Data
 public abstract class Auditable implements Serializable {
 
     @Id
@@ -47,10 +53,5 @@ public abstract class Auditable implements Serializable {
     @Column(name = "UPDATED_AT", nullable = false)
     @LastModifiedDate
     private ZonedDateTime updatedAt;
-
-   /* @PrePersist
-    void prePersist(){
-
-    }*/
 
 }

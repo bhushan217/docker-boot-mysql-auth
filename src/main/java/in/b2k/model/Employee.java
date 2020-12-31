@@ -2,15 +2,17 @@ package in.b2k.model;
 
 import in.b2k.model.enums.Rating;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
 
 @Data
-@Builder
+@SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
+@Cacheable
 @Entity
 @Table(name = "B2K_EMPLOYEE")
 public class Employee extends Auditable {
