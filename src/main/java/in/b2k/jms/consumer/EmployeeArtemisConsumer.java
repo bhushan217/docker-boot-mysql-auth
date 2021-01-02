@@ -22,13 +22,14 @@ public class EmployeeArtemisConsumer {
     }
 
     @JmsListener(destination = "${jms.queue.destination.reg_employee}")
-    public void receive(Employee employee, @Header(name = AuthenticationUtil.AUTH_CONTEXT) String authStr) {
+    public void receive(Employee employee, @Header(name = AuthenticationUtil.AUTH_CONTEXT, required = false) String authStr) {
         log.debug("Received employee: {}", employee);
         AuthenticationUtil.setForwardedAuth(authStr);
         final var department = employee.getDepartment();
         if(department!=null && department.getId()!=null){
             employee.setDepartment(departmentRepository.getOne(department.getId()));
         }
-        employeeRepository.save(employee);
+        final var saved = employeeRepository.save(employee);
+        log.debug("saved employee: {}", saved);
     }
 }

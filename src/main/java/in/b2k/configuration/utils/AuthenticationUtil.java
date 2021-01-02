@@ -38,11 +38,7 @@ public class AuthenticationUtil {
     }
 
     public static void setForwardedAuth(String authStr) {
-        Optional.of(authStr)
-        .ifPresent(AuthenticationUtil::setAuthToContext);
-    }
-
-    private static void setAuthToContext(String auths) {
-        SecurityContextHolder.getContext().setAuthentication(AuthenticationUtil.deserialize(auths));
+        if(authStr!=null)
+            SecurityContextHolder.getContext().setAuthentication(AuthenticationUtil.deserialize(authStr));
     }
 }

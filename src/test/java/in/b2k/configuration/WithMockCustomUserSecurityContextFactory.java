@@ -9,8 +9,10 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.test.context.support.WithSecurityContextFactory;
+import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
+@Service
 public class WithMockCustomUserSecurityContextFactory implements WithSecurityContextFactory<WithMockAppUser> {
 
     @Autowired

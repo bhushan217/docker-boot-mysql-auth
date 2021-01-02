@@ -19,9 +19,10 @@ public class DepartmentArtemisConsumer {
     }
 
     @JmsListener(destination = "${jms.queue.destination.reg_department}")
-    public void receive(Department department, @Header(name = AuthenticationUtil.AUTH_CONTEXT) String authStr) {
+    public void receive(Department department, @Header(name = AuthenticationUtil.AUTH_CONTEXT, required = false) String authStr) {
         log.debug("Received department: {}", department);
         AuthenticationUtil.setForwardedAuth(authStr);
-        departmentRepository.save(department);
+        Department saved = departmentRepository.save(department);
+        log.debug("saved employee: {}", saved);
     }
 }
