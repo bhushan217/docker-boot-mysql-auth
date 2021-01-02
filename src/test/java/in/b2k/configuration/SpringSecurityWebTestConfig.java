@@ -1,7 +1,5 @@
 package in.b2k.configuration;
 
-import in.b2k.audit.AppUserDetailsService;
-import in.b2k.audit.AppUserPrincipal;
 import in.b2k.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.TestConfiguration;

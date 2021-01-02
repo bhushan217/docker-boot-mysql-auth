@@ -63,7 +63,7 @@ CREATE TABLE `b2k_category` (
     `updated_by` varchar(31) NOT NULL,
     `version` int(11) DEFAULT NULL,
     `name` varchar(128) NOT NULL,
-    `dept_level` int(6) DEFAULT NULL,
+    `dept_level` SMALLINT DEFAULT NULL,
     `parent_id` binary(16) DEFAULT NULL,
     PRIMARY KEY (`id`),
     -- KEY `key_parent_id` (`parent_id`),

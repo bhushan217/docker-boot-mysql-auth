@@ -55,14 +55,13 @@ services:
     working_dir: /usr/src/app
     restart: on-failure
     volumes:
-      #- ${APPLICATION_ROOT_FOLDER}:/usr/src/app:rw
-      #- ./:/usr/src/app:rw
-      - ${M2_REPO}:/root/.m2/repository:rw
-      - ${M2_CONFIG}:/root/.m2:rw
+      - ${M2_REPO}:/root/.m2:rw
+      #- ${M2_CONFIG}:/root/.m2:rw
       - ${BASE_TMP_DIR}:/var/tmp:rw
+    expose:
+      - 8080
     ports:
       - 8082:8080
-      - 5005:5005
     #rm: true
     mem_limit: 300m
     mem_reservation: 100m
@@ -84,7 +83,11 @@ services:
       SPRING_ARTEMIS_HOST: b2k-activemq-artemis
       SPRING_ARTEMIS_PORT: 61616
       #SPRING_ARTEMIS_broker-url=tcp://localhost:61616?jms.redeliveryPolicy.maximumRedeliveries=1
-    command: ls # mvn clean package
+    #command: mvn spring-boot:run
     
 networks:
     b2k-network:
+      driver: bridge
+#volumes:
+#  springboot-mysql-app:
+#    external: true

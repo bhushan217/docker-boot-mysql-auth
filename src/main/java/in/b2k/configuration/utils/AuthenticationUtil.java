@@ -20,8 +20,7 @@ public class AuthenticationUtil {
 
     public static Authentication deserialize(String authentication) {
         byte[] decoded = DatatypeConverter.parseBase64Binary(authentication);
-        Authentication auth = (Authentication) SerializationUtils.deserialize(decoded);
-        return auth;
+        return (Authentication) SerializationUtils.deserialize(decoded);
     }
 
     public static MessagePostProcessor forwardAuthContext(){
@@ -40,8 +39,10 @@ public class AuthenticationUtil {
 
     public static void setForwardedAuth(String authStr) {
         Optional.of(authStr)
-        .ifPresent(auths->{
-            SecurityContextHolder.getContext().setAuthentication(AuthenticationUtil.deserialize(auths));
-        });
+        .ifPresent(AuthenticationUtil::setAuthToContext);
+    }
+
+    private static void setAuthToContext(String auths) {
+        SecurityContextHolder.getContext().setAuthentication(AuthenticationUtil.deserialize(auths));
     }
 }

@@ -16,6 +16,7 @@ import org.springframework.test.context.ActiveProfiles;
 
 import static in.b2k.utils.B2kConstatnt.TEST_AUDITOR;
 import static org.hamcrest.Matchers.is;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @DataJpaTest()
 @ActiveProfiles("test")
@@ -36,8 +37,7 @@ public class EmployeeRepositoryIntegrationTest {
 
     @Test
     public void testCurrentAuditor() {
-        String currentAuditor = auditorAware.getCurrentAuditor().get();
-        MatcherAssert.assertThat(TEST_AUDITOR, is(currentAuditor));
+        auditorAware.getCurrentAuditor().ifPresent(currentAuditor-> assertEquals(TEST_AUDITOR, currentAuditor));
     }
 
     @Test
