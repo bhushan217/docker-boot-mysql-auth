@@ -6,6 +6,8 @@ import in.b2k.request.vo.DepartmentVO;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
+import java.util.List;
+
 @Mapper
 public interface DepartmentMapper {
 
@@ -13,4 +15,6 @@ public interface DepartmentMapper {
 
     Department toEntity(DepartmentVO source);
     DepartmentVO toVO(Department destination);
+
+    List<DepartmentVO> toVOList(List<Department> departmentList);
 }

@@ -13,9 +13,12 @@ CREATE TABLE `b2k_department` (
     `updated_by` varchar(31) NOT NULL,
     `version` int(11) DEFAULT NULL,
     `name` varchar(31) NOT NULL,
-    PRIMARY KEY (`id`)
+    PRIMARY KEY (`id`),
+    UNIQUE KEY `UK_B2K_DEPARTMENT` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1
 ;
+INSERT INTO `b2k_department` values ( unhex(replace(UUID(), '-', '')), current_timestamp , 'SYSTEM', current_timestamp , 'SYSTEM', 1, 'ADMIN');
+INSERT INTO `b2k_department` values ( unhex(replace(UUID(), '-', '')), current_timestamp , 'SYSTEM', current_timestamp , 'SYSTEM', 1, 'IT');
 CREATE TABLE `b2k_employee` (
     `id` binary(16) NOT NULL,
     `created_at` datetime NOT NULL,
@@ -29,8 +32,8 @@ CREATE TABLE `b2k_employee` (
     `rating` varchar(255) DEFAULT NULL,
     `dept_id` binary(16) DEFAULT NULL,
     PRIMARY KEY (`id`),
-    KEY `FK_B2K_DEPT_EMP` (`dept_id`),
-    CONSTRAINT `FK_B2K_DEPT_EMP` FOREIGN KEY (`dept_id`) REFERENCES `b2k_department` (`id`)
+    UNIQUE KEY `UK_B2K_EMP_EMAIL` (`email_id`),
+    CONSTRAINT `FK_B2K_EMP_DEPT` FOREIGN KEY (`dept_id`) REFERENCES `b2k_department` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1
 ;
 CREATE TABLE `b2k_user` (
@@ -52,7 +55,32 @@ CREATE TABLE `b2k_user` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1
 ;
 INSERT INTO `b2k_user` values ( unhex(replace(UUID(), '-', '')), current_timestamp , 'SYSTEM', current_timestamp , 'SYSTEM', 1, 1,null, 'admin', 'admin7', 'ADMIN', null, 'admin' );
-INSERT INTO `b2k_department` values ( unhex(replace(UUID(), '-', '')), current_timestamp , 'SYSTEM', current_timestamp , 'SYSTEM', 1, 'ADMIN');
-INSERT INTO `b2k_department` values ( unhex(replace(UUID(), '-', '')), current_timestamp , 'SYSTEM', current_timestamp , 'SYSTEM', 1, 'IT');
+CREATE TABLE `b2k_category` (
+    `id` binary(16) NOT NULL,
+    `created_at` datetime NOT NULL,
+    `created_by` varchar(31) NOT NULL,
+    `updated_at` datetime NOT NULL,
+    `updated_by` varchar(31) NOT NULL,
+    `version` int(11) DEFAULT NULL,
+    `name` varchar(128) NOT NULL,
+    `dept_level` int(6) DEFAULT NULL,
+    `parent_id` binary(16) DEFAULT NULL,
+    PRIMARY KEY (`id`),
+    -- KEY `key_parent_id` (`parent_id`),
+    UNIQUE KEY `UK_b2k_category` (`name`),
+    CONSTRAINT `fk_b2k_category` FOREIGN KEY (`parent_id`) REFERENCES `b2k_category` (`id`)
+);
+INSERT INTO `b2k_category` values ( unhex(replace(UUID(), '-', '')), current_timestamp , 'SYSTEM', current_timestamp , 'SYSTEM', 0, 'Electronics', 0, null);
+INSERT INTO `b2k_category` values ( unhex(replace(UUID(), '-', '')), current_timestamp , 'SYSTEM', current_timestamp , 'SYSTEM', 0,
+                                    'Mobile phones', 1, (select id from `b2k_category` c where name='Electronics'));
+INSERT INTO `b2k_category` values ( unhex(replace(UUID(), '-', '')), current_timestamp , 'SYSTEM', current_timestamp , 'SYSTEM', 0,
+                                    'Washing machines', 1, (select id from `b2k_category`c  where name='Electronics'));
+INSERT INTO `b2k_category` values ( unhex(replace(UUID(), '-', '')), current_timestamp , 'SYSTEM', current_timestamp , 'SYSTEM', 0,
+                                    'iPhone', 2, (select id from `b2k_category` c where name='Mobile phones'));
+INSERT INTO `b2k_category` values ( unhex(replace(UUID(), '-', '')), current_timestamp , 'SYSTEM', current_timestamp , 'SYSTEM', 0,
+                                    'Micromax', 2, (select id from `b2k_category` c where name='Mobile phones'));
+INSERT INTO `b2k_category` values ( unhex(replace(UUID(), '-', '')), current_timestamp , 'SYSTEM', current_timestamp , 'SYSTEM', 0,
+                                    'LG', 2, (select id from `b2k_category` c where name='Washing machines'));
+
 
 

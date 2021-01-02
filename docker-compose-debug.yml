@@ -4,7 +4,7 @@ services:
     container_name: b2k-mysql-db
     env_file:
       - .env
-    image: "mysql/mysql-server:5.7" 
+    image: "mysql/mysql-server:5.7"
     ports:
       - 3308:3306
     networks:
@@ -16,14 +16,14 @@ services:
       - MYSQL_PASSWORD= ${MYSQL_PASSWORD}
       - MYSQL_ROOT_PASSWORD= ${MYSQL_ROOT_PASSWORD}
     volumes:
-        - ./mysql-data:/var/lib/mysql57:rw
-        - ./mysql-init:/docker-entrypoint-initdb.d/:ro
+      - ./mysql-data:/var/lib/mysql57:rw
+      - ./mysql-init:/docker-entrypoint-initdb.d/:ro
 
   #activemq-artemis      vromero/activemq-artemis
   b2k-activemq-artemis:
     env_file:
       - .env
-    image: "vromero/activemq-artemis"
+    image: "vromero/activemq-artemis:2.15.0"
     environment:
       - BASE_IMAGE=vromero/activemq-artemis
       - ACTIVEMQ_ARTEMIS_VERSION=${ACTIVEMQ_ARTEMIS_VERSION}
@@ -51,12 +51,15 @@ services:
       - .env
     build:
       context: ./
-      #dockerfile: Dockerfile
+      dockerfile: Dockerfile
     working_dir: /usr/src/app
     restart: on-failure
     volumes:
       #- ${APPLICATION_ROOT_FOLDER}:/usr/src/app:rw
-      - ${M2_REPO}:/root/.m2
+      #- ./:/usr/src/app:rw
+      - ${M2_REPO}:/root/.m2/repository:rw
+      - ${M2_CONFIG}:/root/.m2:rw
+      - ${BASE_TMP_DIR}:/var/tmp:rw
     ports:
       - 8082:8080
       - 5005:5005
@@ -66,13 +69,14 @@ services:
     depends_on:
       - b2k-mysql-db
       - b2k-activemq-artemis
-    networks: 
-      b2k-network: 
+    networks:
+      b2k-network:
     environment:
+      #JAVA_TOOL_OPTIONS: "agentlib:jdwp=transport=dt_socket,address=5005,server=y,suspend=n"
       LOG_DIR: ${LOG_DIR}
       JDBC_DRIVER: ${JDBC_DRIVER}
       SPRING_DATASOURCE_USERNAME: ${MYSQL_USER}
-      SPRING_DATASOURCE_PASSWORD: ${MYSQL_PASSWORD}    
+      SPRING_DATASOURCE_PASSWORD: ${MYSQL_PASSWORD}
       SPRING_DATASOURCE_URL: jdbc:mysql://b2k-mysql-db/${MYSQL_DB}?useSSL=false&allowPublicKeyRetrieval=true
       SPRING_ARTEMIS_MODE: native
       SPRING_ARTEMIS_USER: ${ARTEMIS_USERNAME}
@@ -80,7 +84,8 @@ services:
       SPRING_ARTEMIS_HOST: b2k-activemq-artemis
       SPRING_ARTEMIS_PORT: 61616
       #SPRING_ARTEMIS_broker-url=tcp://localhost:61616?jms.redeliveryPolicy.maximumRedeliveries=1
-    command: mvn spring-boot:run #mvn clean package #
-    
+    command: ls # mvn clean package
+
 networks:
-    b2k-network:
+  b2k-network:
+    driver: bridge

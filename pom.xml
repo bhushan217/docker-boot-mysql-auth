@@ -22,9 +22,11 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<java.version>11</java.version>
+
 		<lombok.version>1.18.16</lombok.version>
 		<lombok-maven-plugin.version>1.18.16.0</lombok-maven-plugin.version>
 		<org.mapstruct.version>1.4.1.Final</org.mapstruct.version>
+		<lombok-mapstruct.version>0.2.0</lombok-mapstruct.version>
 		<!--<spring.version>5.2.2.RELEASE</spring.version>-->
 		<h2.version>1.4.200</h2.version>
 
@@ -123,7 +125,7 @@
 							<goal>repackage</goal>
 						</goals>
 						<configuration>
-							<mainClass>in.b2k.Application</mainClass>
+							<mainClass>in.b2k.B2kApplication</mainClass>
 						</configuration>
 					</execution>
 				</executions>
@@ -147,7 +149,7 @@
 						<path>
 							<groupId>org.projectlombok</groupId>
 							<artifactId>lombok-mapstruct-binding</artifactId>
-							<version>0.2.0</version>
+							<version>${lombok-mapstruct.version}</version>
 						</path>
 						<!-- Mapstruct should follow the lombok path(s) -->
 						<path>
@@ -161,7 +163,7 @@
 			</plugin>
 		</plugins>
 	</build>
-	<repositories>
+	<!--<repositories>
 		<repository>
 			<id>spring-releases</id>
 			<url>https://repo.spring.io/libs-release</url>
@@ -172,5 +174,5 @@
 			<id>spring-releases</id>
 			<url>https://repo.spring.io/libs-release</url>
 		</pluginRepository>
-	</pluginRepositories>
+	</pluginRepositories>-->
 </project>

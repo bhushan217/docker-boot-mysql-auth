@@ -10,6 +10,8 @@ import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
 import org.mapstruct.factory.Mappers;
 
+import java.util.List;
+
 @Mapper
 public interface EmployeeMapper {
 
@@ -22,4 +24,16 @@ public interface EmployeeMapper {
     Department toDepartmentEntity(DepartmentVO departmentVO);
     @Mappings({ @Mapping(source = "department.id", target = "id") })
     DepartmentVO toDepartmentVO(Department department);
+
+    @Mappings({
+            @Mapping(source = "employee.id", target = "id"),
+            @Mapping(source = "employeeVO.department", target = "department", ignore = true),
+            @Mapping(source = "employeeVO.firstName", target = "firstName"),
+            @Mapping(source = "employeeVO.lastName", target = "lastName"),
+            @Mapping(source = "employeeVO.emailId", target = "emailId"),
+            @Mapping(source = "employeeVO.rating", target = "rating")
+    })
+    Employee toEntity(Employee employee, EmployeeVO employeeVO);
+    List<Employee> toEntityList(List<EmployeeVO> employeeVOList);
+    List<EmployeeVO> toVOList(List<Employee> employeeList);
 }

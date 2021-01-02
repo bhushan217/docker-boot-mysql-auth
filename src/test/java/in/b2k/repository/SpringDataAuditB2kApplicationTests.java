@@ -26,7 +26,7 @@ import static org.jgroups.util.Util.assertNotNull;
 @DataJpaTest()
 @ActiveProfiles("test")
 @Import({TestAuditingConfigurationB2k.class})
-public class SpringDataAuditApplicationTests {
+public class SpringDataAuditB2kApplicationTests {
 
     @Autowired
     private UserRepository userRepository;

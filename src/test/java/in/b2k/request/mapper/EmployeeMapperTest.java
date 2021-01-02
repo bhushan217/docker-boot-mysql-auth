@@ -10,8 +10,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.UUID;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
+import static org.junit.jupiter.api.Assertions.*;
 
 @Slf4j
 class EmployeeMapperTest {
@@ -21,7 +20,7 @@ class EmployeeMapperTest {
         //given
         final var employeeId = UUID.randomUUID();
         final var departmentId = UUID.randomUUID();
-        DepartmentVO departmentVO = DepartmentVO.builder().id(departmentId).name("IT").build();
+        final var departmentVO = DepartmentVO.builder().id(departmentId).name("IT").build();
         final var employeeVO = EmployeeVO.builder()
                 .id(employeeId)
                 .firstName("Vikas")
@@ -33,17 +32,18 @@ class EmployeeMapperTest {
         //when
         final var employee = EmployeeMapper.INSTANCE.toEntity(employeeVO);
         log.info("employee {}\n employeeVO{}", employee, employeeVO);
+
         //then
-        assertThat("employee not null", employee!=null);
-        assertThat(employee.getId(), is(employeeVO.getId()));
-        assertThat(employee.getFirstName(), is(employeeVO.getFirstName()));
-        assertThat(employee.getLastName(), is(employeeVO.getLastName()));
-        assertThat(employee.getEmailId(), is(employeeVO.getEmailId()));
-        assertThat(employee.getRating(), is(employeeVO.getRating()));
-        assertThat("department not null", employeeVO.getDepartment()!=null);
-        assertThat(employee.getDepartment().getName(), is(employeeVO.getDepartment().getName()));
-        assertThat("departmentId not null", employeeVO.getDepartment().getId()!=null);
-        assertThat(employee.getDepartment().getId(), is(employeeVO.getDepartment().getId()));
+        assertNotNull(employee, "employee is null");
+        assertEquals(employee.getId(), employeeVO.getId());
+        assertEquals(employee.getFirstName(), employeeVO.getFirstName());
+        assertEquals(employee.getLastName(), employeeVO.getLastName());
+        assertEquals(employee.getEmailId(), employeeVO.getEmailId());
+        assertEquals(employee.getRating(), employeeVO.getRating());
+
+        assertNotNull(employeeVO.getDepartment(), "department is null");
+        assertEquals(employee.getDepartment().getName(), employeeVO.getDepartment().getName());
+        assertEquals(employee.getDepartment().getId(), employeeVO.getDepartment().getId());
     }
 
     @Test
@@ -51,28 +51,32 @@ class EmployeeMapperTest {
         //given
         final var employeeId = UUID.randomUUID();
         final var departmentId = UUID.randomUUID();
-        Department department = Department.builder().id(departmentId).name("IT").build();
+        final var department = Department.builder().id(departmentId).name("IT").build();
         final var employee = Employee.builder()
                 .id(employeeId)
                 .firstName("Vikas")
                 .lastName("Kamthe")
-                .emailId("emp@department.in")
+                .emailId("emp@department.b2k.in")
                 .rating(Rating.FOUR)
                 .department(department)
                 .build();
+
         //when
         final var employeeVO = EmployeeMapper.INSTANCE.toVO(employee);
         log.info("employeeVO {}\n employee{}", employeeVO, employee);
+
         //then
-        assertThat("employeeVO not null", employeeVO!=null);
-        assertThat(employeeVO.getId(), is(employee.getId()));
-        assertThat(employeeVO.getFirstName(), is(employee.getFirstName()));
-        assertThat(employeeVO.getLastName(), is(employee.getLastName()));
-        assertThat(employeeVO.getEmailId(), is(employee.getEmailId()));
-        assertThat(employeeVO.getRating(), is(employee.getRating()));
-        assertThat("departmentVO not null", employee.getDepartment()!=null);
-        assertThat(employeeVO.getDepartment().getName(), is(employee.getDepartment().getName()));
-        assertThat("departmentVO Id not null", employee.getDepartment().getId()!=null);
-        assertThat(employeeVO.getDepartment().getId(), is(employee.getDepartment().getId()));
+        assertNotNull(employeeVO, "employeeVO is null");
+        assertEquals(employeeVO.getId(), employee.getId());
+        assertEquals(employeeVO.getFirstName(), employee.getFirstName());
+        assertEquals(employeeVO.getLastName(), employee.getLastName());
+        assertEquals(employeeVO.getEmailId(), employee.getEmailId());
+        assertEquals(employeeVO.getRating(), employee.getRating());
+
+        final var departmentR = employee.getDepartment();
+        final var departmentVO = employeeVO.getDepartment();
+        assertNotNull(departmentR, "departmentVO is null");
+        assertEquals(departmentVO.getId(), departmentR.getId());
+        assertEquals(departmentVO.getName(), departmentR.getName());
     }
 }

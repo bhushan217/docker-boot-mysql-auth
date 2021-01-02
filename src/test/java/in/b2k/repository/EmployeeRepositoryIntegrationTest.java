@@ -44,7 +44,7 @@ public class EmployeeRepositoryIntegrationTest {
     @WithMockAppUser(username =  "bhushan")//, name = "Kmathe")
     public void whenFindByName_thenReturnEmployee() {
         // given
-        Department dept = new Department("IT");
+        Department dept = Department.builder().name("IT").build();
         departmentRepository.save(dept);
         Employee employee = new Employee("Amit", "Kamathe", "amit@gmail.com", Rating.FOUR, dept);
         employeeRepository.save(employee);

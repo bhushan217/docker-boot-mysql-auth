@@ -1,5 +1,6 @@
 package in.b2k.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import in.b2k.model.enums.Rating;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
@@ -14,7 +15,7 @@ import javax.persistence.*;
 @ToString(callSuper = true)
 @Cacheable
 @Entity
-@Table(name = "B2K_EMPLOYEE")
+@Table(name = "B2K_EMPLOYEE", uniqueConstraints = @UniqueConstraint(name = "UK_B2K_EMP_EMAIL", columnNames = "EMAIL_ID"))
 public class Employee extends Auditable {
 
     @Column(name = "FIRST_NAME", length = 63, nullable = false)
@@ -29,9 +30,9 @@ public class Employee extends Auditable {
     @Enumerated(EnumType.STRING)
     private Rating rating;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @JoinColumn(name = "DEPT_ID")
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "DEPT_ID", referencedColumnName = "ID", foreignKey = @ForeignKey(name = "FK_B2K_EMP_DEPT"))
     private Department department;
-
 
 }

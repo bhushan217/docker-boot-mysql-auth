@@ -2,6 +2,7 @@ package in.b2k.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.GenericGenerator;
@@ -21,6 +22,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
+@EqualsAndHashCode(of = "id")
 @MappedSuperclass
 public abstract class Auditable implements Serializable {
 
@@ -32,7 +34,7 @@ public abstract class Auditable implements Serializable {
     @Column(name = "ID", updatable = false, nullable = false)*/
     @GeneratedValue(generator = "uuid2")
     @GenericGenerator(name = "uuid2", strategy = "uuid2")
-    @Column(columnDefinition = "BINARY(16)")
+    @Column(columnDefinition = "BINARY(16)", name = "ID", updatable = false, nullable = false)
     private UUID id;
 
     @Version

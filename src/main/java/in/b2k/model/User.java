@@ -13,14 +13,14 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(callSuper = false)
-@ToString
+@EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true)
 @Cacheable
 @Entity
 @Table(name = "B2K_USER", uniqueConstraints = @UniqueConstraint(name = "UK_B2K_USERNAME", columnNames = "USERNAME"))
 public class User extends Auditable {
 
-    @Column(name = "USERNAME", unique = true, length = 31, updatable = false, nullable = false)
+    @Column(name = "USERNAME", length = 31, updatable = false, nullable = false)
     @NotBlank(message = "username is required")
     protected String username;
 
