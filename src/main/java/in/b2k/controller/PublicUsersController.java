@@ -32,7 +32,7 @@ final class PublicUsersController {
     @NonNull
     UserRepository userRepository;
 
-    @PreAuthorize("hasAuthority('ADMIN')")
+    //@PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping("/register")
     String register(@Valid @RequestBody UserVO userVO) {
 

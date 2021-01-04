@@ -44,9 +44,9 @@ services:
       - ./artemis-data:/var/lib/mysql57:rw
       #- ./artemis-init:/docker-entrypoint-initdb.d/:ro
 
-  springboot-mysql-app:
-    container_name: springboot-mysql-app
-    image: springboot-mysql-app:latest
+  b2k-docker-boot-mysql-auth:
+    container_name: docker-boot-mysql-auth
+    image: docker-boot-mysql-auth:latest
     env_file:
       - .env
     build:
@@ -69,7 +69,7 @@ services:
       - b2k-mysql-db
       - b2k-activemq-artemis
     networks: 
-      b2k-network: 
+      b2k-network:
     environment:
       #JAVA_TOOL_OPTIONS: "agentlib:jdwp=transport=dt_socket,address=5005,server=y,suspend=n"
       LOG_DIR: ${LOG_DIR}
@@ -84,10 +84,11 @@ services:
       SPRING_ARTEMIS_PORT: 61616
       #SPRING_ARTEMIS_broker-url=tcp://localhost:61616?jms.redeliveryPolicy.maximumRedeliveries=1
     #command: mvn spring-boot:run
-    
+
 networks:
-    b2k-network:
-      driver: bridge
+  b2k-network:
+    driver: bridge
+
 #volumes:
 #  springboot-mysql-app:
 #    external: true

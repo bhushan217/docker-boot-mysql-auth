@@ -6,9 +6,9 @@
 	<groupId>com.b2k</groupId>
 	<artifactId>docker-boot-mysql-auth</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<packaging>jar</packaging>
+	<packaging>war</packaging>
 
-	<name>springboot2-jpa-crud-example</name>
+	<name>docker-boot-mysql-auth</name>
 	<description>Demo project for Spring Boot Mysql Docker Compose</description>
 
 	<parent>
@@ -29,6 +29,7 @@
 		<lombok-mapstruct.version>0.2.0</lombok-mapstruct.version>
 		<!--<spring.version>5.2.8.RELEASE</spring.version>-->
 		<h2.version>1.4.200</h2.version>
+		<docker-maven-plugin.version>0.34.1</docker-maven-plugin.version>
 
 		<!-- automatically run annotation processors within the incremental compilation -->
 		<m2e.apt.activation>jdt_apt</m2e.apt.activation>
@@ -54,6 +55,11 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-artemis</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-tomcat</artifactId>
+			<scope>provided</scope>
 		</dependency>
 
 		<dependency>
@@ -83,7 +89,6 @@
 			<groupId>org.mapstruct</groupId>
 			<artifactId>mapstruct</artifactId>
 			<version>${org.mapstruct.version}</version>
-			<scope>provided</scope>
 		</dependency>
 
 		<!-- TEST  -->
@@ -130,12 +135,13 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				<configuration>
-					<excludeDevtools>false</excludeDevtools>
+					<finalName>docker-boot-mysql-auth</finalName>
+					<!--<excludeDevtools>false</excludeDevtools>-->
 					<!--<jvmArguments>
 						-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=5005
 					</jvmArguments>-->
 				</configuration>
-				<executions>
+				<!--<executions>
 					<execution>
 						<goals>
 							<goal>repackage</goal>
@@ -144,7 +150,7 @@
 							<mainClass>in.b2k.B2kApplication</mainClass>
 						</configuration>
 					</execution>
-				</executions>
+				</executions>-->
 			</plugin>
 
 			<plugin>

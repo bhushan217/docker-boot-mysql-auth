@@ -12,6 +12,7 @@ import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,9 +22,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
 @TestMethodOrder(MethodOrderer.Alphanumeric.class)
-@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_CLASS)
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 @WithMockAppUser(username = "TEST_USER")
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)//, classes = {SpringSecurityWebTestConfig.class})
+@AutoConfigureMockMvc
+@SpringBootTest//(classes = {SpringSecurityWebTestConfig.class, TestAuditingConfigurationB2k.class})//webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
 class EmployeeControllerTest {
 
     @Autowired
@@ -57,7 +59,7 @@ class EmployeeControllerTest {
         assertTrue(responseEntity.getStatusCode().equals(HttpStatus.OK));
 
         DepartmentVO departmentVO = responseEntity.getBody();
-        Thread.sleep(1_000);//give activemq some time
+        Thread.sleep(100);//give activemq some time
     }
 
     @Test
@@ -83,7 +85,7 @@ class EmployeeControllerTest {
         assertTrue(responseEntity.getStatusCode().equals(HttpStatus.OK));
 
         EmployeeVO employeeVO = responseEntity.getBody();
-        Thread.sleep(1_000);//give activemq some time
+        Thread.sleep(100);//give activemq some time
     }
 
     @Test
